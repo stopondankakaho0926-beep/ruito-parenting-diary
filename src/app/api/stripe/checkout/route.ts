@@ -61,6 +61,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check if Stripe is configured
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Payment system not configured' },
+        { status: 503 }
+      )
+    }
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

@@ -20,6 +20,13 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  if (!stripe) {
+    return NextResponse.json(
+      { error: 'Payment system not configured' },
+      { status: 503 }
+    )
+  }
+
   let event
 
   try {
