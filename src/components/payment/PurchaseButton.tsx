@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { getStripe } from '@/lib/stripe'
 
 interface PurchaseButtonProps {
   articleId: string
@@ -39,17 +38,10 @@ export function PurchaseButton({ articleId, price, title }: PurchaseButtonProps)
       }
 
       // Redirect to Stripe Checkout
-      const stripe = await getStripe()
-      if (!stripe) {
-        throw new Error('Failed to load Stripe')
-      }
-
-      const { error: stripeError } = await stripe.redirectToCheckout({
-        sessionId: data.sessionId,
-      })
-
-      if (stripeError) {
-        throw new Error(stripeError.message)
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        throw new Error('No checkout URL received')
       }
     } catch (err: any) {
       setError(err.message || '購入処理に失敗しました')
