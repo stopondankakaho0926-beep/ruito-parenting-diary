@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
             user_email: userEmail,
             stripe_payment_id: session.payment_intent as string,
             status: 'completed',
-          })
+          } as Database['public']['Tables']['purchases']['Insert'])
 
         if (insertError) {
           console.error('Failed to record purchase:', insertError)
