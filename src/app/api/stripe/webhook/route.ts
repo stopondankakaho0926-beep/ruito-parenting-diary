@@ -62,14 +62,16 @@ export async function POST(request: NextRequest) {
         }
 
         // Record the purchase
+        const purchaseData = {
+          article_id: articleId,
+          user_email: userEmail,
+          stripe_payment_id: session.payment_intent as string,
+          status: 'completed',
+        }
+
         const { error: insertError } = await supabaseAdmin
           .from('purchases')
-          .insert({
-            article_id: articleId,
-            user_email: userEmail,
-            stripe_payment_id: session.payment_intent as string,
-            status: 'completed',
-          } as Database['public']['Tables']['purchases']['Insert'])
+          .insert(purchaseData as any)
 
         if (insertError) {
           console.error('Failed to record purchase:', insertError)
